@@ -19,9 +19,14 @@ class SurveysControllerTest extends IntegrationTestCase
         'app.surveys',
         'app.users',
         'app.responses',
-        'app.responses_surveys'
+       /* 'app.responses_surveys'   */
     ];
 
+    public function initialize() {
+        parent::initialize();
+
+        $this->loadComponent('Auth');
+    }
     /**
      * Test index method
      *
@@ -32,6 +37,13 @@ class SurveysControllerTest extends IntegrationTestCase
         $this->markTestIncomplete('Not implemented yet.');
     }
 
+    public function testIsAuthorized()
+    {
+        $sc = new SurveysController();
+        
+        $this->assertFalse($sc->isAuthorized(null));
+    }
+    
     /**
      * Test view method
      *

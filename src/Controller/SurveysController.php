@@ -67,7 +67,7 @@ class SurveysController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {
+    {/*
         if($newResponses = $this->request->data['new_responses']) {
             $newResponses = explode(',', $newResponses);
             $newResponses = array_map('trim',$newResponses);
@@ -77,7 +77,7 @@ class SurveysController extends AppController
             debug();
         }
         
-        die;
+        die;*/
         $survey = $this->Surveys->newEntity();
         if ($this->request->is('post')) {
             $survey = $this->Surveys->patchEntity($survey, $this->request->getData());
