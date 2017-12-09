@@ -20,6 +20,14 @@
             <button type="button" class="btn btn-primary"><?= __('Se connecter') ?></button>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?= $this->Url->build([
+            'controller'=>'Users',
+            'action'=>'signin'
+        ]) ?>">
+            <button type="button" class="btn btn-info"><?= __('S\'inscrire') ?></button>
+        </a>
+      </li>
       <?php else: ?>
       <li class="nav-item">
         <a class="nav-link" href="<?= $this->Url->build([

@@ -44,12 +44,9 @@ use Cake\Routing\Route\DashedRoute;
 Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope('/', function (RouteBuilder $routes) {
-    /**
-     * Here, we are connecting '/' (base path) to a controller called 'Pages',
-     * its action called 'display', and we pass a param to select the view file
-     * to use (in this case, src/Template/Pages/home.ctp)...
-     */
+
     $routes->connect('/', ['controller' => 'Surveys', 'action' => 'index']);
+    $routes->connect('/signin', ['controller' => 'Users', 'action' => 'signin']);
 
     /**
      * Connect catchall routes for all controllers.
