@@ -16,7 +16,7 @@ class UsersController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Auth->allow(['logout','signin']);
+        $this->Auth->allow(['logout','signin','profil']);
     }
 
     /**
@@ -115,20 +115,45 @@ class UsersController extends AppController
      * 
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function signin() {
+    public function signin($user = null) {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+            $email = $this->request->getData('email');
+            $confirmEmail = $this->request->getData('confirmEmail');
+            
+            if($email==$confirmEmail) {
+                $otherUser = $this->Users->findByEmail($email)->first();
+                if(empty($otherUser)) {
 
-                return $this->redirect(['action' => 'index']);
+                    $user = $this->Users->patchEntity($user, $this->request->getData());
+//                    debug($user);die;
+                    
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success(__('The user has been saved.'));
+
+                        return $this->redirect(['action' => 'index']);
+                    }
+                } else {
+                    $this->Flash->error(__('This email is already taken!'));
+                }
+            } else {
+                $this->Flash->error(__('The two emails must be identical!'));
             }
+            
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);        
         
         $this->render('inscription');
+    }
+    
+    /**
+     * Permet d'afficher les données de l'utilisateur.
+     * 
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     */
+    public function profil($user = null) {
+        
     }
 }

@@ -51,7 +51,11 @@
           <?= $user['nickname'] ?>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#"><?= __('Profil') ?></a>
+            <?= $this->Html->link(
+            __('Profil'),
+            '/users/profil',
+            ['class' => 'dropdown-item']
+            ); ?>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="<?= $this->Url->build([
             'controller'=>'Users',
