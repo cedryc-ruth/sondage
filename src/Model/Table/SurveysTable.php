@@ -87,4 +87,11 @@ class SurveysTable extends Table
 
         return $rules;
     }
+    
+    public function findTotalSurveysByUserId(Query $query, array $options) {
+        $query = $query->find('all')
+                    ->where(['user_id'=>$options['id']]);
+        
+        return $query;
+    }
 }

@@ -47,6 +47,11 @@ Router::scope('/', function (RouteBuilder $routes) {
 
     $routes->connect('/', ['controller' => 'Surveys', 'action' => 'index']);
     $routes->connect('/signin', ['controller' => 'Users', 'action' => 'signin']);
+    $routes->connect('/users/profil/:id', 
+            ['controller' => 'Users', 'action' => 'view'],
+            ['_name' => 'profil'])
+            ->setPass(['id'])
+            ->setPatterns(['id' => '[0-9]+']);
 
     /**
      * Connect catchall routes for all controllers.

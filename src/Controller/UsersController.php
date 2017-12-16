@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Controller
@@ -33,7 +34,7 @@ class UsersController extends AppController
     }
 
     /**
-     * View method
+     * Permet d'afficher les données de l'utilisateur.
      *
      * @param string|null $id User id.
      * @return \Cake\Http\Response|void
@@ -41,12 +42,22 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
+        if($id!=$this->Auth->user('id')) {
+            $this->redirect($this->referer());
+        }
+        
+        $tableSurveys = TableRegistry::get('Surveys');
+        $query = $tableSurveys->find('TotalSurveysByUserId',['id'=>$id]);
+        $nbSurveys = $query->count();
+        $this->set('nbSurveys', $nbSurveys);
+        
+        /*  Déjà injecté dans AppController->beforeRender()
         $user = $this->Users->get($id, [
             'contain' => ['Surveys']
         ]);
 
         $this->set('user', $user);
-        $this->set('_serialize', ['user']);
+        $this->set('_serialize', ['user']);*/
     }
 
     /**
@@ -148,12 +159,4 @@ class UsersController extends AppController
         $this->render('inscription');
     }
     
-    /**
-     * Permet d'afficher les données de l'utilisateur.
-     * 
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function profil($user = null) {
-        
-    }
 }

@@ -53,7 +53,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <?= $this->Html->link(
             __('Profil'),
-            '/users/profil',
+            '/users/profil/'.$user['id'],
             ['class' => 'dropdown-item']
             ); ?>
           <div class="dropdown-divider"></div>
