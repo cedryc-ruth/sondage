@@ -47,17 +47,44 @@ class UsersController extends AppController
         }
         
         $tableSurveys = TableRegistry::get('Surveys');
-        $query = $tableSurveys->find('TotalSurveysByUserId',['id'=>$id]);
+        $query = $tableSurveys->find('SurveysByUserId',['id'=>$id]);
         $nbSurveys = $query->count();
         $this->set('nbSurveys', $nbSurveys);
         
-        /*  Déjà injecté dans AppController->beforeRender()
-        $user = $this->Users->get($id, [
-            'contain' => ['Surveys']
+        $userEntity = $this->Users->get($id, [
+            'contain' => []
         ]);
+        
+        //var_dump($this->request->query);
+        $showUpdateForm = false;
+        if(isset($this->request->query['edit'])) {
+            $showUpdateForm = true;
+        }
+        
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $newPass = $this->request->getData('newPassword');
+            $confirmPass = $this->request->getData('confirmPassword');
 
-        $this->set('user', $user);
-        $this->set('_serialize', ['user']);*/
+            if($newPass==$confirmPass) {
+                $userEntity = $this->Users->patchEntity($userEntity, $this->request->getData());
+                if(!empty($newPass)) {
+                    $userEntity->password = $newPass;
+                }
+                
+                //var_dump($userEntity);die;
+                if ($this->Users->save($userEntity)) {
+                    $this->Flash->success(__('The user has been saved.'));
+
+                    return $this->redirect(['action' => 'view', $id]);
+                }
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            } else {
+                $this->Flash->error(__('Mots de passes différents!'));
+            }
+        }
+        
+        $this->set('userEntity', $userEntity);
+        $this->set('showUpdateForm', $showUpdateForm);
     }
 
     /**
