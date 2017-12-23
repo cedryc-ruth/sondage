@@ -6,10 +6,35 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <form class="form-inline my-2 my-lg-0">
+        <?= $this->Form->create(null,[
+            'type' => 'get',
+            'url' => [
+                'controller'=>'Surveys',
+                'action'=>'search',
+                ],
+            'class'=>'form-inline my-2 my-lg-0'
+            ]); ?>
+        <?php
+        $this->Form->setTemplates([
+            'searchContainer' => '{{content}}'
+        ]);
+        ?>
+        <?= $this->Form->control('keyword',[
+                'label'=>false,
+                'class'=>'form-control mr-sm-2',
+                'type'=>'search',
+                'placeholder'=>__('Rechercher'),
+                'aria-label'=>__('Rechercher')
+            ]); ?>
+        <?= $this->Form->button(__('Rechercher'),[
+            'class' => 'btn btn-outline-success my-2 my-sm-0'
+        ]); ?>
+        <?= $this->Form->end(); ?>
+<!--    <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="<?= __('Rechercher') ?>" aria-label="<?= __('Rechercher') ?>">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><?= __('Rechercher') ?></button>
     </form>
+-->
     <ul class="navbar-nav mr-auto">
       <?php if(empty($user)): ?>
       <li class="nav-item">

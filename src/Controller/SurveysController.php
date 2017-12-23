@@ -16,7 +16,7 @@ class SurveysController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Auth->allow(['getSurveysByUserId']);
+        $this->Auth->allow(['getSurveysByUserId','search']);
     }
     
     public function isAuthorized($user) {
@@ -36,7 +36,8 @@ class SurveysController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Users']
+            'contain' => ['Users'],
+            'limit' => 3
         ];
         $surveys = $this->paginate($this->Surveys);
 
@@ -159,5 +160,38 @@ class SurveysController extends AppController
             $this->Flash->error("Vous n'êtes pas autorisé à afficher d'autres sondages.");
             return $this->redirect(['action' => 'index']);
         }
+    }
+    
+    /**
+     * Method search 
+     * Recherche et affiche les sondages sur base d'un mot-clé
+     * 
+     * @return \Cake\Http\Response
+     */
+    public function search()
+    {
+        //Récupérer le mot-clé tapé dans le formulaire de recherche
+        $keyword = $this->request->getQuery('keyword');
+
+        $this->paginate = [
+            'contain' => ['Users','Responses'],
+            'limit' => 3,
+            'finder' => [
+                'SurveysByKeyword'=>['keyword'=>$keyword]
+            ]
+        ];
+                
+        //Préparer et exécuter  la requête
+        $surveys = $this->paginate($this->Surveys);
+        
+        //Solution 2:
+        /* $surveys = $this->paginate($this->Surveys->find('SurveysByKeyword',[
+         *      'keyword'=>$keyword
+         * ]));
+        */
+        
+        //Envoyer les données à la vue pour un template spécifique
+        $this->set(compact('surveys'));
+        $this->render('index');
     }
 }

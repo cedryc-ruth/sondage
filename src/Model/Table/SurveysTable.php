@@ -94,4 +94,13 @@ class SurveysTable extends Table
         
         return $query;
     }
+    
+    public function findSurveysByKeyword(Query $query, array $options) {
+        $query->where([
+            'Surveys.question LIKE' => "%{$options['keyword']}%"
+        ]);
+        
+        return $query;
+    }
+    
 }

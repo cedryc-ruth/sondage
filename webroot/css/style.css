@@ -262,3 +262,8 @@ body {
     font-style:italic;
     font-size:0.85em;
 }
+
+.no-padding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
