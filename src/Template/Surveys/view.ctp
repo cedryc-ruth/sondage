@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Question') ?></th>
-            <td><?= h($survey->question) ?></td>
+            <td><?= h($survey->question) ?> <?= __("Total des votes: $survey->total")?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Id') ?></th>

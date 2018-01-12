@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use App\Model\Entity\Survey;
 
 /**
  * Surveys Controller
@@ -36,11 +37,15 @@ class SurveysController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Users'],
+            'contain' => ['Users','Responses'],
             'limit' => 3
         ];
         $surveys = $this->paginate($this->Surveys);
 
+        foreach($surveys as $survey) {
+            $survey->total = $survey->computePourcentage();
+        }
+        
         $this->set(compact('surveys'));
         $this->set('_serialize', ['surveys']);
     }
@@ -58,6 +63,8 @@ class SurveysController extends AppController
             'contain' => ['Users', 'Responses']
         ]);
 
+        $survey->total = $survey->computePourcentage();
+        
         $this->set('survey', $survey);
         $this->set('_serialize', ['survey']);
     }

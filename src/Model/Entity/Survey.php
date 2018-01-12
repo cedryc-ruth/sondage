@@ -35,4 +35,13 @@ class Survey extends Entity
         'user' => true,
         'responses' => true
     ];
+    
+    public function computePourcentage() {
+        $total = 0;
+        foreach($this->responses as $response) {
+            $total += $response->count;
+        }
+        
+        return $total;
+    }
 }
