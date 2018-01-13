@@ -33,11 +33,15 @@ $this->assign('title',$title);
                     <div class="row">
                         <div class="col-10 no-padding">
                           <div class="progress">
-                              <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <?= ($response->count/$survey->total  )*100 ?>%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"><?= (($response->count/$survey->total  )*100)."%" ?></div>
+                              <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <?= round(($response->count/$survey->total  )*100) ?>%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"><?= round((($response->count/$survey->total  )*100))."%" ?></div>
                           </div>
                         </div>
                         <div class="col-2">
-                          <button type="button" class="btn btn-danger"><?= __('Voter') ?></button>
+                          <?= $this->Form->postButton(__('Voter'),[
+                                    'controller' => 'responses',
+                                    'action' => 'vote',
+                                    $response->id
+                                ],['class' => 'btn btn-danger']) ?>
                         </div>
                     </div>
                   </div>

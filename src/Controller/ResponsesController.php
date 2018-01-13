@@ -12,6 +12,11 @@ use App\Controller\AppController;
  */
 class ResponsesController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow(['vote']);
+    }
 
     public function isAuthorized($user) {
         $user = $this->Auth->user();
@@ -156,5 +161,18 @@ class ResponsesController extends AppController
             'action' => 'add',
             'param' => implode('|',$result)]);
     }
-            
+         
+    public function vote($id) {
+        $response = $this->Responses->get($id);
+        
+        $response->count++;
+        
+        if($this->Responses->save($response)) {
+            $this->Flash->success(__("Votre vote a bien été enregistré."));
+        } else {
+            $this->Flash->error(__("Une erreur s'est produite!"));
+        }
+        
+        $this->redirect(['action'=>'index']);
+    }
 }
