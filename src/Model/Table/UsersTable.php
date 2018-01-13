@@ -43,6 +43,11 @@ class UsersTable extends Table
         $this->hasMany('Surveys', [
             'foreignKey' => 'user_id'
         ]);
+        
+        $this->belongsTo('Groups', [
+            'foreignKey' => 'group_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

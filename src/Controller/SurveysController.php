@@ -17,7 +17,11 @@ class SurveysController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Auth->allow(['getSurveysByUserId','search']);
+        $this->Auth->allow([
+            'getSurveysByUserId',
+            'search',
+            'searchSurveysByGroup',
+        ]);
     }
     
     public function isAuthorized($user) {
@@ -200,5 +204,35 @@ class SurveysController extends AppController
         //Envoyer les données à la vue pour un template spécifique
         $this->set(compact('surveys'));
         $this->render('index');
+    }
+    
+    public function searchSurveysByGroup($groupId)
+    {
+        if($groupId != $this->Auth->user('group_id')) {
+            $this->Flash->error(__('Vous ne pouvez voir que les sondages de votre groupe!'));
+            
+            return $this->redirect($this->referer());
+        }
+        
+        $this->paginate = [
+            'contain' => ['Users.Groups','Responses'],
+        ];
+        
+        //Extraire les données
+        $query = $this->Surveys->find()
+                ->where(['Users.group_id'=>$groupId]);
+        
+        $surveys = $this->paginate($query);
+        
+        foreach($surveys as $survey) {
+            $survey->total = $survey->computePourcentage();
+        }
+        
+        $group = $this->Surveys->Users->Groups
+                ->find()->where(['id'=>$groupId])->first();
+        
+        //Envoyer les données vers la vue
+        $this->set(compact('surveys'));
+        $this->set(compact('group'));
     }
 }
