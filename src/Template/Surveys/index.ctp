@@ -58,6 +58,7 @@ $this->assign('title',$title);
             <?= $this->Html->link(__('View'), ['action' => 'view', $survey->id]) ?>
             <?= $this->Html->link(__('Edit'), ['action' => 'edit', $survey->id]) ?>
             <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $survey->id], ['confirm' => __('Are you sure you want to delete # {0}?', $survey->id)]) ?>
+            <?= $this->Html->link(__('Afficher les commentaires'), ['controller'=>'Comments','action' => 'getComments', $survey->id]) ?>
         </td>
         </div>
     </div>
